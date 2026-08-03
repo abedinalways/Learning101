@@ -239,3 +239,556 @@ userService.getProfile(1).then((user) => console.log(user));
 | Polymorphism | একই নাম, ভিন্ন behavior | method override |
 
 চর্চার জন্য পরামর্শ: তোমার existing কোনো একটা API service ফাইল (যেমন `providerServiceApi.ts`) নিয়ে চেষ্টা করো এটাকে class-based structure-এ রিফ্যাক্টর করতে — practice-এর সবচেয়ে ভালো উপায় হলো নিজের কোডে apply করা।
+
+
+
+
+
+
+Redux(RTK QUery)
+Phase 1 — Redux আসলে কী?
+Without Redux
+Parent
+ ├── Navbar
+ ├── Sidebar
+ ├── Dashboard
+ │      ├── UserCard
+ │      ├── UserInfo
+ │      ├── UserSettings
+ │      └── UserNotification
+ └── Footer
+
+ধরো User Information এসেছে API থেকে।
+
+{
+    id:1,
+    name:"Shahin",
+    role:"Admin"
+}
+
+এখন এই data লাগবে
+
+Navbar
+Sidebar
+Dashboard
+Settings
+Notification
+
+সব জায়গায়।
+
+React এ সাধারণত কী করি?
+
+Parent
+   ↓
+Dashboard
+   ↓
+UserInfo
+
+তারপর আবার
+
+Parent
+   ↓
+Navbar
+
+আবার
+
+Parent
+   ↓
+Sidebar
+
+একই Data বারবার Props দিয়ে পাঠাতে হচ্ছে।
+
+এটাকে বলে
+
+Prop Drilling
+
+Redux এই সমস্যার সমাধান।
+
+Redux কী?
+
+Redux হচ্ছে
+
+একটা Central Storage।
+
+একটা বড় আলমারির মতো।
+
+            Redux Store
+
+        +------------------+
+        |                  |
+Navbar  |                  |
+Sidebar |    USER DATA     |
+Footer  |                  |
+Profile |                  |
+        +------------------+
+
+যার যখন দরকার
+
+সে Store থেকে Data নিয়ে নিবে।
+
+Parent থেকে আর Prop পাঠাতে হবে না।
+
+Real Life Example
+
+ভাবো,
+
+একটা অফিস আছে।
+
+আগে
+
+Employee
+
+↓
+
+Manager
+
+↓
+
+HR
+
+↓
+
+Finance
+
+↓
+
+Store
+
+প্রত্যেকে একে অপরকে File দিচ্ছে।
+
+Redux এ
+
+            Server
+
+               |
+
+               V
+
+         Central Cabinet
+
+      (Redux Store)
+
+        /    |      \
+
+ Navbar Sidebar Dashboard
+
+যার যখন দরকার
+
+সে Cabinet খুলে File নিয়ে নিল।
+
+তাহলে Redux কেন?
+
+কারণ
+
+State Share করা সহজ
+Global State
+Predictable
+Debug করা সহজ
+DevTools আছে
+বড় Project এর জন্য Best
+তাহলে Redux কি Database?
+
+না।
+
+Redux Memory তে থাকে।
+
+Browser Refresh করলে
+
+হারিয়ে যায়।
+
+তাহলে Backend থেকে আবার Data কেন আসে?
+
+কারণ
+
+Redux Permanent Storage না।
+
+Redux হচ্ছে Cache।
+
+Redux Flow
+User Click
+
+     |
+
+     V
+
+Dispatch Action
+
+     |
+
+     V
+
+Reducer
+
+     |
+
+     V
+
+Store Update
+
+     |
+
+     V
+
+React Re-render
+
+এটাই Redux-এর Heart।
+
+Redux এর ৫টা Main Concept
+Store
+
+State
+
+Action
+
+Reducer
+
+Dispatch
+
+এগুলো যদি বুঝো
+
+Redux এর ৭০% শেষ।
+
+১) State
+{
+   count:10
+}
+
+এটাই State।
+
+২) Store
+
+সব State যেখানে থাকে।
+
+Store
+
+{
+
+ user
+
+ product
+
+ auth
+
+ cart
+
+}
+৩) Action
+
+Action মানে
+
+কি ঘটেছে।
+
+Increment
+
+Decrement
+
+Login
+
+Logout
+
+Update User
+৪) Dispatch
+
+Dispatch মানে
+
+Action পাঠানো।
+
+dispatch(login())
+৫) Reducer
+
+Reducer হচ্ছে
+
+State কিভাবে Change হবে সেটা বলে।
+
+Current State
+
+↓
+
+Reducer
+
+↓
+
+New State
+একটা ছোট Example
+
+আগে
+
+count=0
+
+Button Click
+
+dispatch(increment())
+
+Reducer
+
+count=1
+
+Store Update
+
+React আবার Render।
+
+পুরো Flow
+
+Button
+
+↓
+
+dispatch()
+
+↓
+
+Reducer
+
+↓
+
+Store
+
+↓
+
+React UI Update
+Redux Toolkit কেন?
+
+আগে Redux লিখতে
+
+প্রায় ২০০+ লাইন লাগতো।
+
+আজকে
+
+Redux Toolkit
+
+createSlice()
+
+দিয়ে
+
+২০ লাইনে হয়ে যায়।
+
+Redux Toolkit হচ্ছে
+
+Redux-এর Official Way।
+
+RTK Query কী?
+
+এটাই সবচেয়ে গুরুত্বপূর্ণ।
+
+আগে API Call করতাম
+
+axios
+
+↓
+
+useEffect
+
+↓
+
+loading
+
+↓
+
+error
+
+↓
+
+cache
+
+↓
+
+refetch
+
+↓
+
+retry
+
+↓
+
+manual state
+
+সব নিজে লিখতে হতো।
+
+RTK Query এ
+
+const {data} = useGetUsersQuery();
+
+শেষ।
+
+Loading
+
+Caching
+
+Retry
+
+Refetch
+
+Invalidation
+
+সব Automatic।
+
+Without RTK Query
+useEffect(()=>{
+
+axios.get()
+
+setLoading()
+
+setData()
+
+setError()
+
+},[])
+RTK Query
+const {data,isLoading,error}
+
+=
+useGetUsersQuery()
+
+ব্যাস।
+
+RTK Query ভিতরে কী করে?
+Component
+
+↓
+
+Hook
+
+↓
+
+API Slice
+
+↓
+
+Base Query
+
+↓
+
+Backend
+
+↓
+
+Cache
+
+↓
+
+Component
+Complete Flow
+Button
+
+↓
+
+RTK Query Hook
+
+↓
+
+API Slice
+
+↓
+
+fetchBaseQuery
+
+↓
+
+Server
+
+↓
+
+Response
+
+↓
+
+Cache
+
+↓
+
+UI
+Cache
+
+প্রথমবার
+
+GET /users
+
+Server Hit।
+
+দ্বিতীয়বার
+
+GET /users
+
+Server এ যায় না।
+
+Cache থেকে আসে।
+
+তাই Fast।
+
+Mutation
+
+GET
+
+useGetUsersQuery()
+
+POST
+
+useCreateUserMutation()
+
+PUT
+
+useUpdateUserMutation()
+
+DELETE
+
+useDeleteUserMutation()
+Query
+
+মানে
+
+Read Data
+
+Mutation
+
+মানে
+
+Data Change
+
+পুরো RTK Query Architecture
+                    Backend API
+                         │
+                         │
+                  fetchBaseQuery
+                         │
+                         ▼
+                  API Slice
+        (createApi + endpoints)
+                         │
+        ┌────────────────┴────────────────┐
+        │                                 │
+ useGetUsersQuery()             useCreateUserMutation()
+        │                                 │
+        └──────────────┬──────────────────┘
+                       ▼
+                 Redux Store Cache
+                       │
+                       ▼
+                 React Components
+
+এটাই RTK Query-এর মূল ধারণা।
+
+এরপর কী হবে?
+
+এরপর আমরা ধাপে ধাপে Production-Level Next.js + TypeScript + Redux Toolkit + RTK Query প্রজেক্ট তৈরি করব, যেখানে থাকবে:
+
+কেন configureStore লাগে
+createSlice গভীরভাবে
+createApi
+fetchBaseQuery
+Authentication
+Access Token Refresh
+Protected Route
+Folder Structure (Scalable)
+SOLID Principle অনুযায়ী Architecture
+Feature-based Structure
+Reusable API Layer
+Error Handling
+Loading Strategy
+Optimistic Update
+Cache Invalidation
+Pagination
+Infinite Scroll
+SSR/CSR-এর সাথে RTK Query (Next.js App Router)
+Production Best Practices
+একটি সম্পূর্ণ CRUD Project (User Management)
